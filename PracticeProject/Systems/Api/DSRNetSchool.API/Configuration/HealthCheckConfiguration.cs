@@ -27,7 +27,9 @@ public static class HealthCheckConfiguration
     /// <param name="app">Application</param>
     public static void UseAppHealthCheck(this WebApplication app)
     {
-        app.MapHealthChecks("/health", new HealthCheckOptions()
+        app.MapHealthChecks("/health");
+
+        app.MapHealthChecks("/health/detail", new HealthCheckOptions()
         {
             ResponseWriter = WriteHealthCheckResponse,
             AllowCachingResponses = false,
@@ -56,16 +58,16 @@ public static class HealthCheckConfiguration
 
     private class HealthCheck
     {
-        public string Status { get; set; }
-        public string Component { get; set; }
-        public string Description { get; set; }
-        public string Duration { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public string Component { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Duration { get; set; } = string.Empty;
     }
 
     private class HealthCheckResponse
     {
-        public string OverallStatus { get; set; }
-        public IEnumerable<HealthCheck> HealthChecks { get; set; }
-        public string TotalDuration { get; set; }
+        public string OverallStatus { get; set; } = string.Empty;
+        public IEnumerable<HealthCheck>? HealthChecks { get; set; }
+        public string TotalDuration { get; set; } = string.Empty;
     }
 }

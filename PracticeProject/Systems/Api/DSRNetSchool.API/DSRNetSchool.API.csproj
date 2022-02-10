@@ -2,13 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>api.xml</DocumentationFile>
     <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,10 +36,6 @@
     <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
     <PackageReference Include="Serilog.Expressions" Version="3.2.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Classes\DSRNetSchool.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,7 +75,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.Settings\DSRNetSchool.Settings.csproj" />
+    <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Common\DSRNetSchool.Common.csproj" />
   </ItemGroup>
 
 </Project>

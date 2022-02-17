@@ -9,10 +9,23 @@ public class SettingsSource : ISettingsSource
 
     public SettingsSource(IConfiguration config = null)
     {
-        configuration = config ?? new ConfigurationBuilder()
+        if (config != null)
+        {
+            configuration = config;
+            return;
+        }
+
+        var builder = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory()))
-            .AddJsonFile("appsettings.json", optional: false)
-            .AddJsonFile("appsettings.development.json", optional: true)
+            .AddJsonFile("appsettings.json", optional: false);
+
+        var aspNetCoreEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "";
+        bool idDev = aspNetCoreEnv.ToLower().Equals("development");
+
+        if (idDev)
+            builder.AddJsonFile("appsettings.development.json", optional: true);
+
+        configuration = builder
             .AddEnvironmentVariables()
             .Build();
     }

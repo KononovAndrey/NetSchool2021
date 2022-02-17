@@ -27,6 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation" Version="10.3.6" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
@@ -76,6 +80,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.BookService\DSRNetSchool.BookService.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.Settings\DSRNetSchool.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Common\DSRNetSchool.Common.csproj" />
   </ItemGroup>

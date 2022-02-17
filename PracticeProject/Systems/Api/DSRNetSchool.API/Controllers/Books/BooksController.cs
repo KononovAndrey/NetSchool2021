@@ -1,67 +1,60 @@
 ﻿namespace DSRNetSchool.API.Controllers.Books;
 
+using AutoMapper;
 using DSRNetSchool.API.Controllers.Books.Models;
+using DSRNetSchool.BookService;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/v{version:apiVersion}/books")]
 [ApiController]
 [ApiVersion("1.0")]
-[ApiVersion("2.0")]
 public class BooksController : ControllerBase
 {
+    private readonly IMapper mapper;
     private readonly ILogger<BooksController> logger;
+    private readonly IBookService bookService;
 
-    public BooksController(ILogger<BooksController> logger)
+    public BooksController(IMapper mapper, ILogger<BooksController> logger, IBookService bookService)
     {
+        this.mapper = mapper;
         this.logger = logger;
-    }
-
-    [HttpGet("info")]
-    public IActionResult GetInfo()
-    {
-        return Ok(new {
-            IAmOk = true,
-        });
+        this.bookService = bookService;
     }
 
     [HttpGet("")]
-    [ApiVersion("1.0")]
-    public List<Book> GetBooks()
+    public async Task<IEnumerable<BookResponse>> GetBooks()
     {
-        return new List<Book>()
-        {
-            new Book() {
-                Id = 1,
-                Title = "T1",
-                Description = "D1"
-            },
-            new Book() {
-                Id = 2,
-                Title = "T2",
-                Description = "D2"
-            },
-        };
+        var books = await bookService.GetBooks();
+        var response = mapper.Map<IEnumerable<BookResponse>>(books);
+
+        return response;
     }
 
-    [HttpGet("")]
-    [ApiVersion("2.0")]
-    public List<BookV2> GetBooksV2()
+    [HttpGet("{id}")]
+    public async Task<BookResponse> GetBookById([FromRoute] int id)
     {
-        return new List<BookV2>()
-        {
-            new BookV2() {
-                Id = 1,
-                Title = "T1",
-                Author = "A1",
-                Description = "D1"
-            },
-            new BookV2() {
-                Id = 2,
-                Title = "T2",
-                Author = "A2",
-                Description = "D2"
-            },
-        };
+        var book = await bookService.GetBook(id);
+        var response = mapper.Map<BookResponse>(book);
+
+        return response;
     }
 
+    [HttpPost("")]
+    public async Task<BookResponse> AddBook([FromBody] AddBookRequest request)
+    {
+        var model = mapper.Map<AddBookModel>(request);
+        var book = await bookService.AddBook(model);
+        var response = mapper.Map<BookResponse>(book);
+
+        return response;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateBook([FromRoute] int id, [FromBody] UpdateBookRequest request)
+    {
+        var model = mapper.Map<UpdateBookModel>(request);
+        await bookService.UpdateBook(id, model);
+
+        return Ok();
+    }
 }

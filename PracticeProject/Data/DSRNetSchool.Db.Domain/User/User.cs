@@ -1,4 +1,4 @@
-﻿namespace DSRNetSchool.Db.Domain;
+﻿namespace DSRNetSchool.Db.Entities;
 
 using Microsoft.AspNetCore.Identity;
 

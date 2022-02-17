@@ -1,3 +1,4 @@
+using DSRNetSchool.API;
 using DSRNetSchool.API.Configuration;
 using DSRNetSchool.Settings;
 using Serilog;
@@ -30,16 +31,20 @@ services.AddAppSwagger(settings);
 
 services.AddAppCors();
 
-services.AddControllers();
+services.AddControllers().AddValidator();
 
 services.AddRazorPages();
 
-services.AddSettings();
+services.AddAppServices();
+
+services.AddAutoMappers();
 
 
 var app = builder.Build();
 
 Log.Information("Starting up");
+
+app.UseAppMiddlewares();
 
 app.UseStaticFiles();
 

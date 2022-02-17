@@ -1,4 +1,4 @@
-﻿namespace DSRNetSchool.Db.Domain;
+﻿namespace DSRNetSchool.Db.Entities;
 
 public class Book : BaseEntity
 {
@@ -9,5 +9,5 @@ public class Book : BaseEntity
     public string Description { get; set; }
 
     public virtual ICollection<Category> Categories { get; set; }
-    public virtual ICollection<BooksCategories> BooksCategories { get; set; }
+    //public virtual ICollection<BooksCategories> BooksCategories { get; set; }
 }

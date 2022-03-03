@@ -31,11 +31,13 @@ services.AddAppSwagger(settings);
 
 services.AddAppCors();
 
+services.AddAppServices();
+
+services.AddAppAuth(settings);
+
 services.AddControllers().AddValidator();
 
 services.AddRazorPages();
-
-services.AddAppServices();
 
 services.AddAutoMappers();
 
@@ -57,6 +59,8 @@ app.UseAppHealthCheck();
 app.UseSerilogRequestLogging();
 
 app.UseAppSwagger();
+
+app.UseAppAuth();
 
 app.MapRazorPages();
 

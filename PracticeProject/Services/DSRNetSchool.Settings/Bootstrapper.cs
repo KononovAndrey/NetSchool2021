@@ -8,7 +8,8 @@ public static class Bootstrapper
     {
         services.AddSingleton<ISettingsSource, SettingsSource>();
         services.AddSingleton<IApiSettings, ApiSettings>();
-        services.AddSingleton<IIdentityServerSettings, IdentityServerSettings>();
+        services.AddSingleton<IIS4Settings, IS4Settings>();
+        services.AddSingleton<IIdentityServerConnectSettings, IdentityServerConnectSettings>();
         services.AddSingleton<IGeneralSettings, GeneralSettings>();
         services.AddSingleton<IDbSettings, DbSettings>();
 

@@ -1,6 +1,8 @@
 ﻿namespace DSRNetSchool.Common.Extensions;
 
+using DSRNetSchool.Common.Exceptions;
 using DSRNetSchool.Common.Responses;
+using FluentValidation.Results;
 
 public static class ErrorResponseExtensions
 {
@@ -9,41 +11,41 @@ public static class ErrorResponseExtensions
     /// </summary>
     /// <param name="data"></param>
     /// <returns></returns>
-    //public static ErrorResponse ToErrorResponse(this ValidationResult data)
-    //{
-    //    var res = new ErrorResponse()
-    //    {
-    //        Message = "",
-    //        FieldErrors = data.Errors.Select(x =>
-    //        {
-    //            var elems = x.ErrorMessage.Split('&');
-    //            var errorName = elems[0];
-    //            var errorMessage = elems.Length > 0 ? elems[1] : errorName;
-    //            return new ErrorResponseFieldInfo()
-    //            {
-    //                FieldName = x.PropertyName,
-    //                Message = errorMessage,
-    //            };
-    //        })
-    //    };
+    public static ErrorResponse ToErrorResponse(this ValidationResult data)
+    {
+        var res = new ErrorResponse()
+        {
+            Message = "",
+            FieldErrors = data.Errors.Select(x =>
+            {
+                var elems = x.ErrorMessage.Split('&');
+                var errorName = elems[0];
+                var errorMessage = elems.Length > 0 ? elems[1] : errorName;
+                return new ErrorResponseFieldInfo()
+                {
+                    FieldName = x.PropertyName,
+                    Message = errorMessage,
+                };
+            })
+        };
 
-    //    return res;
-    //}
+        return res;
+    }
 
     /// <summary>
     /// Convert process exception to ErrorResponse
     /// </summary>
     /// <param name="data">Process exception</param>
     /// <returns></returns>
-    //public static ErrorResponse ToErrorResponse(this ProcessException data)
-    //{
-    //    var res = new ErrorResponse()
-    //    {
-    //        Message = data.Message
-    //    };
+    public static ErrorResponse ToErrorResponse(this ProcessException data)
+    {
+        var res = new ErrorResponse()
+        {
+            Message = data.Message
+        };
 
-    //    return res;
-    //}
+        return res;
+    }
 
     /// <summary>
     /// Convert exception to ErrorResponse

@@ -10,11 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Duende.IdentityServer" Version="6.0.4" />
+    <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="6.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="keys\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj" />
+    <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Domain\DSRNetSchool.Db.Entities.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.Settings\DSRNetSchool.Settings.csproj" />
+    <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Common\DSRNetSchool.Common.csproj" />
   </ItemGroup>
 
 </Project>

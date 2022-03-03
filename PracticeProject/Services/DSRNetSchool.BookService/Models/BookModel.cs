@@ -1,5 +1,8 @@
 ﻿namespace DSRNetSchool.API.Controllers.Books.Models;
 
+using AutoMapper;
+using DSRNetSchool.Db.Entities;
+
 public class BookModel
 {
     public int Id { get; set; }
@@ -7,3 +10,10 @@ public class BookModel
     public string Note { get; set; } = string.Empty;
 }
 
+public class BookModelProfile : Profile
+{
+    public BookModelProfile()
+    {
+        CreateMap<Book, BookModel>();
+    }
+}

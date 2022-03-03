@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSRNetSchool.Db.Entities", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSRNetSchool.Db.Context", "Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj", "{55900908-BC0D-4848-8532-23D018695685}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSRNetSchool.BookService", "Services\DSRNetSchool.BookService\DSRNetSchool.BookService.csproj", "{5A12A417-F7E3-4E1F-8184-1D78E5BB32CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DSRNetSchool.BookService", "Services\DSRNetSchool.BookService\DSRNetSchool.BookService.csproj", "{5A12A417-F7E3-4E1F-8184-1D78E5BB32CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

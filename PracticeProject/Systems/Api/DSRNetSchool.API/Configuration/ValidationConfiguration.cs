@@ -2,8 +2,10 @@
 
 using DSRNetSchool.Common.Helpers;
 using DSRNetSchool.Common.Responses;
+using DSRNetSchool.Common.Validator;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 public static class ValidatorConfiguration
 {
@@ -14,17 +16,19 @@ public static class ValidatorConfiguration
             options.InvalidModelStateResponseFactory = context =>
             {
                 var fieldErrors = new List<ErrorResponseFieldInfo>();
-                foreach (var key in context.ModelState.Keys)
+                foreach (var item in context.ModelState)
                 {
-                    fieldErrors.Add(new ErrorResponseFieldInfo()
-                    {
-                        FieldName = key,
-                        Message = string.Join(", ", context.ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage))
-                    });
+                    if (item.Value.ValidationState == ModelValidationState.Invalid)
+                        fieldErrors.Add(new ErrorResponseFieldInfo()
+                        {
+                            FieldName = item.Key,
+                            Message = string.Join(", ", item.Value.Errors.Select(x => x.ErrorMessage))
+                        });
                 }
 
                 var result = new BadRequestObjectResult(new ErrorResponse()
                 {
+                    ErrorCode = -1,
                     Message = "One or more validation errors occurred.",
                     FieldErrors = fieldErrors
                 });
@@ -42,7 +46,7 @@ public static class ValidatorConfiguration
 
         ValidatorsRegisterHelper.Register(builder.Services);
 
-        //builder.Services.AddSingleton(typeof(IModelValidator<>), typeof(ModelValidator<>));
+        builder.Services.AddSingleton(typeof(IModelValidator<>), typeof(ModelValidator<>));
 
         return builder;
     }

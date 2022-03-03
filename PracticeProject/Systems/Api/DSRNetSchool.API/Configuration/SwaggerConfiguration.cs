@@ -1,5 +1,6 @@
 ﻿namespace DSRNetSchool.API.Configuration;
 
+using DSRNetSchool.Common.Security;
 using DSRNetSchool.Settings;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -7,7 +8,7 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
-
+using static IdentityModel.OidcConstants;
 
 public static class SwaggerConfiguration
 {
@@ -16,6 +17,9 @@ public static class SwaggerConfiguration
 
     public static IServiceCollection AddAppSwagger(this IServiceCollection services, IApiSettings settings)
     {
+        if (!settings.General.SwaggerVisible)
+            return services;
+
         services.AddOptions<SwaggerGenOptions>()
             .Configure<IApiVersionDescriptionProvider>((options, provider) =>
             {
@@ -54,7 +58,21 @@ public static class SwaggerConfiguration
                 {
                     Password = new OpenApiOAuthFlow
                     {
-                        TokenUrl = new Uri($"{settings.IdentityServer.Url}/connect/token")
+                        TokenUrl = new Uri($"{settings.IdentityServer.Url}/connect/token"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            {AppScopes.BooksRead, "BooksRead"},
+                            {AppScopes.BooksWrite, "BooksWrite"}
+                        }
+                    },
+                    ClientCredentials = new OpenApiOAuthFlow
+                    {
+                        TokenUrl = new Uri($"{settings.IdentityServer.Url}/connect/token"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            {AppScopes.BooksRead, "BooksRead"},
+                            {AppScopes.BooksWrite, "BooksWrite"}
+                        }
                     }
                 }
             });
@@ -84,6 +102,9 @@ public static class SwaggerConfiguration
     {
         var settings = app.Services.GetService<IApiSettings>();
         var provider = app.Services.GetService<IApiVersionDescriptionProvider>();
+
+        if (!settings.General.SwaggerVisible)
+            return;
 
         app.UseSwagger(options =>
         {

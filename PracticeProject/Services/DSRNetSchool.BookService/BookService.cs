@@ -1,30 +1,96 @@
 ﻿namespace DSRNetSchool.BookService;
 
+using AutoMapper;
 using DSRNetSchool.API.Controllers.Books.Models;
+using DSRNetSchool.Common.Exceptions;
+using DSRNetSchool.Common.Validator;
+using DSRNetSchool.Db.Context.Context;
+using DSRNetSchool.Db.Entities;
+using Microsoft.EntityFrameworkCore;
 
 public class BookService : IBookService
 {
-    public async Task<IEnumerable<BookModel>> GetBooks()
+    private readonly IDbContextFactory<MainDbContext> contextFactory;
+    private readonly IMapper mapper;
+    private readonly IModelValidator<AddBookModel> addBookModelValidator;
+    private readonly IModelValidator<UpdateBookModel> updateBookModelValidator;
+
+    public BookService(
+        IDbContextFactory<MainDbContext> contextFactory, 
+        IMapper mapper,
+        IModelValidator<AddBookModel> addBookModelValidator,
+        IModelValidator<UpdateBookModel> updateBookModelValidator
+        )
     {
-        return new List<BookModel>()
-        {
-            new BookModel() { Title = "Title 1", Note = "Note note note"},
-            new BookModel() { Title = "Title 2", Note = ""},
-        };
+        this.contextFactory = contextFactory;
+        this.mapper = mapper;
+        this.addBookModelValidator = addBookModelValidator;
+        this.updateBookModelValidator = updateBookModelValidator;
+    }
+
+    public async Task<IEnumerable<BookModel>> GetBooks(int offset = 0, int limit = 10)
+    {
+        using var context = await contextFactory.CreateDbContextAsync();
+
+        var books = context.Books.AsQueryable();
+
+        books = books
+            .Skip(Math.Max(offset, 0))
+            .Take(Math.Min(limit, 1000));
+
+        var data = (await books.ToListAsync()).Select(book => mapper.Map<BookModel>(book));
+
+        return data;
     }
 
     public async Task<BookModel> GetBook(int id)
     {
-        return new BookModel() { Title = "Title 1", Note = "Note note note" };
+        using var context = await contextFactory.CreateDbContextAsync();
+
+        var book = await context.Books.FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+        var data = mapper.Map<BookModel>(book);
+
+        return data;
     }
 
     public async Task<BookModel> AddBook(AddBookModel model)
     {
-        return new BookModel() { Title = "Title 1", Note = "Note note note" };
+        addBookModelValidator.Check(model);
+
+        using var context = await contextFactory.CreateDbContextAsync();
+
+        var book = mapper.Map<Book>(model);
+        await context.Books.AddAsync(book);
+        context.SaveChanges();
+
+        return mapper.Map<BookModel>(book);
     }
 
-    public async Task UpdateBook(int id, UpdateBookModel model)
+    public async Task UpdateBook(int bookId, UpdateBookModel model)
     {
+        updateBookModelValidator.Check(model);
 
+        using var context = await contextFactory.CreateDbContextAsync();
+
+        var book = await context.Books.FirstOrDefaultAsync(x => x.Id.Equals(bookId));
+
+        ProcessException.ThrowIf(() => book is null, $"The book (id: {bookId}) was not found");
+
+        book = mapper.Map(model, book);
+
+        context.Books.Update(book);
+        context.SaveChanges();
+    }
+
+    public async Task DeleteBook(int bookId)
+    {
+        using var context = await contextFactory.CreateDbContextAsync();
+
+        var book = await context.Books.FirstOrDefaultAsync(x => x.Id.Equals(bookId))
+            ?? throw new ProcessException($"The book (id: {bookId}) was not found");
+
+        context.Remove(book);
+        context.SaveChanges();
     }
 }

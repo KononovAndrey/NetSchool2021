@@ -3,6 +3,8 @@
 using AutoMapper;
 using DSRNetSchool.API.Controllers.Books.Models;
 using DSRNetSchool.BookService;
+using DSRNetSchool.Common.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/v{version:apiVersion}/books")]
@@ -22,6 +24,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet("")]
+    [Authorize(AppScopes.BooksRead)]
     public async Task<IEnumerable<BookResponse>> GetBooks()
     {
         var books = await bookService.GetBooks();
@@ -31,6 +34,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AppScopes.BooksRead)]
     public async Task<BookResponse> GetBookById([FromRoute] int id)
     {
         var book = await bookService.GetBook(id);
@@ -40,6 +44,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost("")]
+    [Authorize(AppScopes.BooksWrite)]
     public async Task<BookResponse> AddBook([FromBody] AddBookRequest request)
     {
         var model = mapper.Map<AddBookModel>(request);
@@ -50,10 +55,20 @@ public class BooksController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AppScopes.BooksWrite)]
     public async Task<IActionResult> UpdateBook([FromRoute] int id, [FromBody] UpdateBookRequest request)
     {
         var model = mapper.Map<UpdateBookModel>(request);
         await bookService.UpdateBook(id, model);
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(AppScopes.BooksWrite)]
+    public async Task<IActionResult> DeleteBook([FromRoute] int id)
+    {
+        await bookService.DeleteBook(id);
 
         return Ok();
     }

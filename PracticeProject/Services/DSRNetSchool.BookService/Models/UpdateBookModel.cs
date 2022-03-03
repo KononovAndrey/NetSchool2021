@@ -1,5 +1,7 @@
 ﻿namespace DSRNetSchool.API.Controllers.Books.Models;
 
+using AutoMapper;
+using DSRNetSchool.Db.Entities;
 using FluentValidation;
 
 public class UpdateBookModel
@@ -21,3 +23,10 @@ public class UpdateBookModelValidator : AbstractValidator<UpdateBookModel>
     }
 }
 
+public class UpdateBookModelProfile : Profile
+{
+    public UpdateBookModelProfile()
+    {
+        CreateMap<UpdateBookModel, Book>();
+    }
+}

@@ -1,9 +1,8 @@
 ﻿@page "/"
+@layout MainLayout
 
-<PageTitle>Index</PageTitle>
+@attribute [Authorize]
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<MudTHeadRow>
+    <MudText Typo="Typo.h4" Class="ma-4">Dashboard</MudText><br />
+</MudTHeadRow>

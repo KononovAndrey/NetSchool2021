@@ -18,6 +18,7 @@ services:
     depends_on:
       - dsrnetschool_sqlserver
       - dsrnetschool_rabbitmq 
+      - dsrnetschool_redis 
 
   dsrnetschool_identity:
     image: ${DOCKER_REGISTRY-}dsrnetschoolis
@@ -27,4 +28,15 @@ services:
     depends_on:
       - dsrnetschool_sqlserver
       - dsrnetschool_rabbitmq 
+      - dsrnetschool_redis 
+
+  dsrnetschool_web:
+    image: ${DOCKER_REGISTRY-}dsrnetschoolweb
+    build:
+      context: .
+      dockerfile: Systems/Web/DSRNetSchool.Web/Dockerfile
+    depends_on:
+      - dsrnetschool_sqlserver
+      - dsrnetschool_rabbitmq 
+      - dsrnetschool_redis 
 

@@ -1,5 +1,6 @@
 ﻿namespace DSRNetSchool.API;
 
+using DSRNetSchool.AuthorService;
 using DSRNetSchool.BookService;
 using DSRNetSchool.Settings;
 
@@ -9,6 +10,7 @@ public static class Bootstrapper
     {
         services
             .AddSettings()
+            .AddAuthorService()
             .AddBookService();
     }
 }

@@ -1,17 +1,49 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
+@inject IConfigurationService configuration
+
+<MudThemeProvider @bind-IsDarkMode="@(_darkMode)"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudIconButton Icon="@(_darkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)" @onclick="@DarkModeSwitch" Color="Color.Inherit" Edge="Edge.End" />
+        <UserMenu />
+    </MudAppBar>
+    <MudDrawer @bind-Open="(_navigationMenuVisible)" Elevation="2">
         <NavMenu />
-    </div>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+<MudScrollToTop>
+    <MudFab Color="Color.Tertiary" Icon="@Icons.Filled.ArrowCircleUp" />
+</MudScrollToTop>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@code {
+    private bool _darkMode = false;
+    private bool _navigationMenuVisible = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _darkMode = await configuration.GetDarkMode();
+        _navigationMenuVisible = await configuration.GetNavigationMenuVisible();
+    }
+
+    async void DarkModeSwitch()
+    {
+        _darkMode = !_darkMode;
+        await configuration.SetDarkMode(_darkMode);
+    }
+
+    async void DrawerToggle()
+    {
+        _navigationMenuVisible = !_navigationMenuVisible;
+        await configuration.SetNavigationMenuVisible(_navigationMenuVisible);
+    }
+}

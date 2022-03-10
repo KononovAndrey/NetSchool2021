@@ -45,6 +45,13 @@ services:
     env_file:
       - env.identity
 
+  dsrnetschool_web:
+    ports:
+      - "20002:80"
+    networks:
+      - shared-dsrnetschool-net
+
+
 volumes:
   sqlserver-data:
   rabbitmq-data:
@@ -53,3 +60,4 @@ networks:
   shared-dsrnetschool-net:
     name: DSRNetSchool
     driver: bridge
+

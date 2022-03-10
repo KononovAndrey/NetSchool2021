@@ -7,6 +7,10 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Systems/Identity/DSRNetSchool.Identity/DSRNetSchool.Identity.csproj", "Systems/Identity/DSRNetSchool.Identity/"]
+COPY ["Data/DSRNetSchool.Db.Domain/DSRNetSchool.Db.Entities.csproj", "Data/DSRNetSchool.Db.Domain/"]
+COPY ["Services/DSRNetSchool.Settings/DSRNetSchool.Settings.csproj", "Services/DSRNetSchool.Settings/"]
+COPY ["Shared/DSRNetSchool.Common/DSRNetSchool.Common.csproj", "Shared/DSRNetSchool.Common/"]
+COPY ["Data/DSRNetSchool.Db.Context/DSRNetSchool.Db.Context.csproj", "Data/DSRNetSchool.Db.Context/"]
 RUN dotnet restore "Systems/Identity/DSRNetSchool.Identity/DSRNetSchool.Identity.csproj"
 COPY . .
 WORKDIR "/src/Systems/Identity/DSRNetSchool.Identity"

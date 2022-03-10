@@ -7,6 +7,12 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Systems/Api/DSRNetSchool.API/DSRNetSchool.API.csproj", "Systems/Api/DSRNetSchool.API/"]
+COPY ["Services/DSRNetSchool.Settings/DSRNetSchool.Settings.csproj", "Services/DSRNetSchool.Settings/"]
+COPY ["Services/DSRNetSchool.BookService/DSRNetSchool.BookService.csproj", "Services/DSRNetSchool.BookService/"]
+COPY ["Data/DSRNetSchool.Db.Context/DSRNetSchool.Db.Context.csproj", "Data/DSRNetSchool.Db.Context/"]
+COPY ["Data/DSRNetSchool.Db.Domain/DSRNetSchool.Db.Entities.csproj", "Data/DSRNetSchool.Db.Domain/"]
+COPY ["Shared/DSRNetSchool.Common/DSRNetSchool.Common.csproj", "Shared/DSRNetSchool.Common/"]
+COPY ["Services/DSRNetSchool.AuthorService/DSRNetSchool.AuthorService.csproj", "Services/DSRNetSchool.AuthorService/"]
 RUN dotnet restore "Systems/Api/DSRNetSchool.API/DSRNetSchool.API.csproj"
 COPY . .
 WORKDIR "/src/Systems/Api/DSRNetSchool.API"

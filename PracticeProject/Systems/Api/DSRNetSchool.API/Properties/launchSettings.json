@@ -4,14 +4,13 @@
     "DSRNetSchool.API": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5276",
+      "applicationUrl": "http://localhost:20000",
       "dotnetRunMessages": true
     },
-    "Docker": {
+    "Docker (1)": {
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",

@@ -4,11 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>api.xml</DocumentationFile>
-    <DockerfileContext>..\..\..</DockerfileContext>
+	<DocumentationFile>api.xml</DocumentationFile>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -84,6 +83,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.AuthorService\DSRNetSchool.AuthorService.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.BookService\DSRNetSchool.BookService.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.Settings\DSRNetSchool.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Common\DSRNetSchool.Common.csproj" />

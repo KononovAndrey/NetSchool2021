@@ -26,8 +26,6 @@ public static class AuthConfiguration
             .AddUserManager<UserManager<User>>()
             .AddDefaultTokenProviders();
 
-        //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
         services.AddAuthentication(options =>
         {
             options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;

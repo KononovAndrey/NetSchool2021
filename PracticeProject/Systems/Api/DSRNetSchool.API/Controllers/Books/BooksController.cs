@@ -25,9 +25,9 @@ public class BooksController : ControllerBase
 
     [HttpGet("")]
     [Authorize(AppScopes.BooksRead)]
-    public async Task<IEnumerable<BookResponse>> GetBooks()
+    public async Task<IEnumerable<BookResponse>> GetBooks([FromQuery] int offset = 0, [FromQuery] int limit = 10)
     {
-        var books = await bookService.GetBooks();
+        var books = await bookService.GetBooks(offset, limit);
         var response = mapper.Map<IEnumerable<BookResponse>>(books);
 
         return response;

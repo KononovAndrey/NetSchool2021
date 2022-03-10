@@ -9,5 +9,4 @@ public class Book : BaseEntity
     public string Description { get; set; }
 
     public virtual ICollection<Category> Categories { get; set; }
-    //public virtual ICollection<BooksCategories> BooksCategories { get; set; }
 }

@@ -32,7 +32,10 @@ public class BookService : IBookService
     {
         using var context = await contextFactory.CreateDbContextAsync();
 
-        var books = context.Books.AsQueryable();
+        var books = context
+            .Books
+            .Include(x => x.Author)
+            .AsQueryable();
 
         books = books
             .Skip(Math.Max(offset, 0))
@@ -47,13 +50,12 @@ public class BookService : IBookService
     {
         using var context = await contextFactory.CreateDbContextAsync();
 
-        var book = await context.Books.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        var book = await context.Books.Include(x => x.Author).FirstOrDefaultAsync(x => x.Id.Equals(id));
 
         var data = mapper.Map<BookModel>(book);
 
         return data;
     }
-
     public async Task<BookModel> AddBook(AddBookModel model)
     {
         addBookModelValidator.Check(model);

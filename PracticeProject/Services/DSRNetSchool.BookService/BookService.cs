@@ -16,7 +16,7 @@ public class BookService : IBookService
     private readonly IModelValidator<UpdateBookModel> updateBookModelValidator;
 
     public BookService(
-        IDbContextFactory<MainDbContext> contextFactory, 
+        IDbContextFactory<MainDbContext> contextFactory,
         IMapper mapper,
         IModelValidator<AddBookModel> addBookModelValidator,
         IModelValidator<UpdateBookModel> updateBookModelValidator
@@ -39,7 +39,7 @@ public class BookService : IBookService
 
         books = books
             .Skip(Math.Max(offset, 0))
-            .Take(Math.Min(limit, 1000));
+            .Take(Math.Max(0, Math.Min(limit, 1000)));
 
         var data = (await books.ToListAsync()).Select(book => mapper.Map<BookModel>(book));
 

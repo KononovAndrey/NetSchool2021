@@ -7,7 +7,6 @@ using DSRNetSchool.Settings;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 
 public static class AuthConfiguration
 {
@@ -49,7 +48,8 @@ public static class AuthConfiguration
             });
 
 
-        services.AddAuthorization(options => {
+        services.AddAuthorization(options =>
+        {
             options.AddPolicy(AppScopes.BooksRead, policy => policy.RequireClaim("scope", AppScopes.BooksRead));
             options.AddPolicy(AppScopes.BooksWrite, policy => policy.RequireClaim("scope", AppScopes.BooksWrite));
         });
@@ -57,7 +57,7 @@ public static class AuthConfiguration
         return services;
     }
 
-    public static WebApplication UseAppAuth(this WebApplication app)
+    public static IApplicationBuilder UseAppAuth(this IApplicationBuilder app)
     {
         app.UseAuthentication();
 

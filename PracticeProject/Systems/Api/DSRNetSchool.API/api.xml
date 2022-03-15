@@ -15,7 +15,7 @@
             </summary>
             <param name="services">Services collection</param>
         </member>
-        <member name="M:DSRNetSchool.API.Configuration.CorsConfiguration.UseAppCors(Microsoft.AspNetCore.Builder.WebApplication)">
+        <member name="M:DSRNetSchool.API.Configuration.CorsConfiguration.UseAppCors(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
             Use service
             </summary>

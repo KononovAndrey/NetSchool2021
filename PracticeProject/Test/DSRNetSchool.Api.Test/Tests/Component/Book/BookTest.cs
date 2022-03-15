@@ -2,12 +2,88 @@
 
 using DSRNetSchool.Api.Test.Common;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 [TestFixture]
 public partial class BookTest : ComponentTest
 {
+    [OneTimeSetUp]
+    public async override Task OneTimeSetUp()
+    {
+        await base.OneTimeSetUp();
+
+        await using var context = await DbContext();
+
+        context.Books.RemoveRange(context.Books);
+        context.Authors.RemoveRange(context.Authors);
+        context.Categories.RemoveRange(context.Categories);
+        context.SaveChanges();
+
+        var a1 = new Db.Entities.Author()
+        {
+            Name = "Mark Twen",
+            Detail = new Db.Entities.AuthorDetail()
+            {
+                Country = "USA",
+                Family = "",
+            }
+        };
+        context.Authors.Add(a1);
+
+        var a2 = new Db.Entities.Author()
+        {
+            Name = "Lev Tolstoy",
+            Detail = new Db.Entities.AuthorDetail()
+            {
+                Country = "Russia",
+                Family = "",
+            }
+        };
+        context.Authors.Add(a2);
+
+        var c1 = new Db.Entities.Category()
+        {
+            Title = "Classic"
+        };
+        context.Categories.Add(c1);
+
+        context.Books.Add(new Db.Entities.Book()
+        {
+            Title = "Tom Soyer",
+            Description = "description description description description ",
+            Author = a1,
+            Categories = new List<Db.Entities.Category>() { c1 },
+        });
+
+        context.Books.Add(new Db.Entities.Book()
+        {
+            Title = "War and peace",
+            Description = "description description description description ",
+            Author = a2,
+            Categories = new List<Db.Entities.Category>() { c1 },
+        });
+
+        context.SaveChanges();
+    }
+
+    [OneTimeTearDown]
+    public async override Task OneTimeTearDown()
+    {
+        await using var context = await DbContext();
+
+        try
+        {
+            context.Books.RemoveRange(context.Books);
+            context.SaveChanges();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
     protected static class Urls
     {
         public static string GetBooks(int? offset = null, int? limit = null)

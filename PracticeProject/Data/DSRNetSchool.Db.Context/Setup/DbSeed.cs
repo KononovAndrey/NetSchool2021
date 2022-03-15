@@ -8,7 +8,7 @@ public static class DbSeed
 {
     private static void AddBooks(MainDbContext context)
     {
-        if (context.Books.Any())
+        if (context.Books.Any() || context.Authors.Any() || context.Categories.Any())
             return;
 
         var a1 = new Entities.Author()

@@ -29,7 +29,7 @@ public partial class BookTest
     }
 
     [Test]
-    public async Task GetBooks_InvalidParameters_OkResponse()
+    public async Task GetBooks_NegativeParameters_OkResponse()
     {
         var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
         var url = Urls.GetBooks(-1, -1);

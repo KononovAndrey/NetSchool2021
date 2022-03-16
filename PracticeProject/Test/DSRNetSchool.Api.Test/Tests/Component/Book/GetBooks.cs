@@ -25,6 +25,7 @@ public partial class BookTest
 
         await using var context = await DbContext();
         var books_from_db = context.Books.AsEnumerable();
+
         Assert.AreEqual(books_from_db.Count(), books_from_api.Count());
     }
 

@@ -1,19 +1,18 @@
 ﻿namespace DSRNetSchool.Api.Test.Tests.Component.Book;
 
 using DSRNetSchool.Api.Test.Common;
+using DSRNetSchool.Db.Entities;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 [TestFixture]
 public partial class BookTest : ComponentTest
 {
-    [OneTimeSetUp]
-    public async override Task OneTimeSetUp()
+    [SetUp]
+    public async Task SetUp()
     {
-        await base.OneTimeSetUp();
-
         await using var context = await DbContext();
 
         context.Books.RemoveRange(context.Books);
@@ -68,20 +67,15 @@ public partial class BookTest : ComponentTest
         context.SaveChanges();
     }
 
-    [OneTimeTearDown]
-    public async override Task OneTimeTearDown()
+    [TearDown]
+    public async override Task TearDown()
     {
         await using var context = await DbContext();
-
-        try
-        {
-            context.Books.RemoveRange(context.Books);
-            context.SaveChanges();
-        }
-        catch (Exception ex)
-        {
-            throw ex;
-        }
+        context.Authors.RemoveRange(context.Authors);
+        context.Categories.RemoveRange(context.Categories);
+        context.Books.RemoveRange(context.Books);
+        context.SaveChanges();
+        await base.TearDown();
     }
 
     protected static class Urls
@@ -140,4 +134,36 @@ public partial class BookTest : ComponentTest
         var tokenResponse = await AuthenticateTestUser(user.Username, user.Password, Scopes.Empty);
         return tokenResponse.AccessToken;
     }
+
+    public async Task<int> GetExistedAuthorId()
+    {
+        await using var context = await DbContext();
+        if (context.Authors.Count() == 0)
+        {
+            Author author1 = new Author()
+            {
+                Name = "Test",
+                Detail = new Db.Entities.AuthorDetail()
+                {
+                    Country = "Test",
+                    Family = "Test",
+                }
+            };
+            context.Authors.Add(author1);
+            context.SaveChanges();
+        }
+
+        await using var context1 = await DbContext();
+        var author = context1.Authors.AsEnumerable().First();
+        return author.Id;
+    }
+
+    public async Task<int> GetNotExistedAuthorId()
+    {
+        await using var context = await DbContext();
+        var maxExistedAuthorId = context.Authors.Max(x => x.Id);
+
+        return maxExistedAuthorId + 1;
+    }
+
 }

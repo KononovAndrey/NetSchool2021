@@ -10,85 +10,100 @@ public partial class BookTest
 {
 
     [Test]
-    public async Task AddBook_ValidParameters_Authenticated_Success()
+    public async Task AddBook_ValidParameters_Authenticated_OkResponse()
     {
-        var testUser = GetTestUser();
-        var tokenResponse = await AuthenticateTestUser(testUser.Username, testUser.Password, Scopes.WriteBooks);
-        var accessToken = tokenResponse.AccessToken;
+        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
         var url = Urls.AddBook;
 
-        await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, "test", "test");
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), Generator.ValidDescriptions.First());
         var response = await apiClient.PostJson(url, request, accessToken);
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-        var newBook = context.Books.AsEnumerable().OrderByDescending(x => x.Id).First();
-
-        Assert.AreEqual(request.AuthorId, newBook.AuthorId);
-        Assert.AreEqual(request.Title, newBook.Title);
-        Assert.AreEqual(request.Description, newBook.Description);
-    }
-
-    [Test]
-    public async Task AddBook_EmptyAuthor_Authenticated_BadRequest()
-    {
-        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
-        var url = Urls.AddBook;
-
-        var request = AddBookRequest(0, "test", "test");
-        var response = await apiClient.PostJson(url, request, accessToken);
-        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-    }
-
-    [Test]
-    public async Task AddBook_NotExistedAuthor_Authenticated_BadRequest()
-    {
-        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
-        var url = Urls.AddBook;
-
-        var request = AddBookRequest(100, "test", "test");
-        var response = await apiClient.PostJson(url, request, accessToken);
-        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-    }
-
-    [Test]
-    public async Task AddBook_EmptyTitle_Authenticated_BadRequest()
-    {
-        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
-        var url = Urls.AddBook;
 
         await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, null, "test");
+        var newBook = context.Books.AsEnumerable().OrderByDescending(x => x.Id).FirstOrDefault();
+        Assert.IsNotNull(newBook);
+
+        Assert.AreEqual(request.AuthorId, newBook?.AuthorId);
+        Assert.AreEqual(request.Title, newBook?.Title);
+        Assert.AreEqual(request.Description, newBook?.Description);
+    }
+
+    [Test]
+    [TestCaseSource(typeof(Generator), nameof(Generator.InvalidAuthorIds))]
+    public async Task AddBook_InvalidAuthor_Authenticated_BadRequest(int authorId)
+    {
+        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
+        var url = Urls.AddBook;
+
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), Generator.ValidDescriptions.First());
         var response = await apiClient.PostJson(url, request, accessToken);
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Test]
-    public async Task AddBook_LongTitle_Authenticated_BadRequest()
+    public async Task AddBook_ValidAuthor_Authenticated_OkResponse()
     {
         var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
         var url = Urls.AddBook;
 
-        await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, RandomString(51), "test");
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), Generator.ValidDescriptions.First());
+        var response = await apiClient.PostJson(url, request, accessToken);
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Test]
+    [TestCaseSource(typeof(Generator), nameof(Generator.InvalidTitles))]
+    public async Task AddBook_InvalidTitle_Authenticated_BadRequest(string title)
+    {
+        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
+        var url = Urls.AddBook;
+
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, title, Generator.ValidDescriptions.First());
         var response = await apiClient.PostJson(url, request, accessToken);
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Test]
-    public async Task AddBook_LongDescription_Authenticated_BadRequest()
+    [TestCaseSource(typeof(Generator), nameof(Generator.ValidTitles))]
+    public async Task AddBook_ValidTitle_Authenticated_OkResponse(string title)
     {
         var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
         var url = Urls.AddBook;
 
-        await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, "test", RandomString(2001));
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, title, Generator.ValidDescriptions.First());
+        var response = await apiClient.PostJson(url, request, accessToken);
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Test]
+    [TestCaseSource(typeof(Generator), nameof(Generator.InvalidDescriptions))]
+    public async Task AddBook_InvalidDescription_Authenticated_BadRequest(string description)
+    {
+        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
+        var url = Urls.AddBook;
+
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), description);
         var response = await apiClient.PostJson(url, request, accessToken);
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Test]
+    [TestCaseSource(typeof(Generator), nameof(Generator.ValidDescriptions))]
+    public async Task AddBook_ValidDescription_Authenticated_OkResponse(string description)
+    {
+        var accessToken = await AuthenticateUser_ReadAndWriteBooksScope();
+        var url = Urls.AddBook;
+
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), description);
+        var response = await apiClient.PostJson(url, request, accessToken);
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
     [Test]
@@ -96,10 +111,9 @@ public partial class BookTest
     {
         var url = Urls.AddBook;
 
-        await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, "test", "test");
-        var response = await apiClient.PostJson(url, request);
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), Generator.ValidDescriptions.First());
+        var response = await apiClient.PostJson(url, request, null);
         Assert.AreEqual(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
@@ -109,9 +123,8 @@ public partial class BookTest
         var accessToken = await AuthenticateUser_EmptyScope();
         var url = Urls.AddBook;
 
-        await using var context = await DbContext();
-        var author = context.Authors.AsEnumerable().First();
-        var request = AddBookRequest(author.Id, "test", "test");
+        var authorId = await GetExistedAuthorId();
+        var request = AddBookRequest(authorId, Generator.ValidTitles.First(), Generator.ValidDescriptions.First());
         var response = await apiClient.PostJson(url, request, accessToken);
         Assert.AreEqual(HttpStatusCode.Forbidden, response.StatusCode);
     }

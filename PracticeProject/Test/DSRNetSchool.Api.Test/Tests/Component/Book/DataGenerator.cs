@@ -1,6 +1,6 @@
 ﻿namespace DSRNetSchool.Api.Test.Tests.Component.Book;
 
-public partial class BookTest
+public partial class BookIntegrationTest
 {
     public static class Generator
     {

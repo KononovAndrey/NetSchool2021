@@ -2,7 +2,7 @@
 
 using DSRNetSchool.API.Controllers.Books.Models;
 
-public partial class BookTest
+public partial class BookIntegrationTest
 {
     public static AddBookRequest AddBookRequest(int authorId, string title, string description)
     {

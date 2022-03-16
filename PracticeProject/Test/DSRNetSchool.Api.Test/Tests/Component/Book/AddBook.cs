@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-public partial class BookTest
+public partial class BookIntegrationTest
 {
 
     [Test]

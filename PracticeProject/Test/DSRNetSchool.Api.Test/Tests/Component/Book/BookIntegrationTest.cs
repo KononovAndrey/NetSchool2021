@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 [TestFixture]
-public partial class BookTest : ComponentTest
+public partial class BookIntegrationTest : ComponentTest
 {
     [SetUp]
     public async Task SetUp()

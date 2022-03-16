@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 /// <summary>
 /// Get books tests
 /// </summary>
-public partial class BookTest
+public partial class BookIntegrationTest
 {
     [Test]
     public async Task GetBooks_ValidParameters_Authenticated_OkResponse()

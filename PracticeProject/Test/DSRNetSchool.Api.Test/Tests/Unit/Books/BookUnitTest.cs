@@ -57,4 +57,12 @@ public partial class BookUnitTest : UnitTest
         var book = context.Books.FirstOrDefault(x => x.Id == id);
         return book;
     }
+
+    protected async override Task ClearDb()
+    {
+        await using var context = await DbContext();
+        context.Books.RemoveRange(context.Books);
+        context.Authors.RemoveRange(context.Authors);
+        context.SaveChanges();
+    }
 }

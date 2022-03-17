@@ -3,6 +3,7 @@
 using DSRNetSchool.Api.Test.Common;
 using DSRNetSchool.API;
 using DSRNetSchool.API.Configuration;
+using DSRNetSchool.Db.Context.Setup;
 using DSRNetSchool.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -39,6 +40,10 @@ public class TestServices
         services.AddControllers().AddValidator();
 
         ServiceProvider = services.BuildServiceProvider();
+
+        DbInit.Execute(ServiceProvider);
+
+        DbSeed.Execute(ServiceProvider);
     }
 
     public T Get<T>()

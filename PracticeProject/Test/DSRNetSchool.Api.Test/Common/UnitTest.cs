@@ -14,6 +14,17 @@ public abstract class UnitTest
     protected IDbContextFactory<MainDbContext> contextFactory;
     protected async Task<MainDbContext> DbContext() => await contextFactory.CreateDbContextAsync();
 
+    [TearDown]
+    public async virtual Task TearDown()
+    {
+        await ClearDb();
+    }
+
+    protected async virtual Task ClearDb()
+    {
+        // Nothing to do
+    }
+
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {

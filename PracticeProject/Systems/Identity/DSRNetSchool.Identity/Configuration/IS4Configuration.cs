@@ -37,7 +37,7 @@ public static class IS4Configuration
         return services;
     }
 
-    public static WebApplication UseIS4(this WebApplication app)
+    public static IApplicationBuilder UseIS4(this IApplicationBuilder app)
     {
         app.UseIdentityServer();
 

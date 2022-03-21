@@ -16,7 +16,7 @@ public static class DbConfiguration
         return services;
     }
 
-    public static WebApplication UseAppDbContext(this WebApplication app)
+    public static IApplicationBuilder UseAppDbContext(this IApplicationBuilder app)
     {
         return app;
     }

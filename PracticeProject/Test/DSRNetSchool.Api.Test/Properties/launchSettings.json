@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "DSRNetSchool.Api.Test": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:63576;http://localhost:63577"
+    }
+  }
+}

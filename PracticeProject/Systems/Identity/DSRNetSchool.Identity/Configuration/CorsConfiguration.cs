@@ -28,7 +28,7 @@ public static class CorsConfiguration
     /// Use service
     /// </summary>
     /// <param name="app">Application</param>
-    public static void UseAppCors(this WebApplication app)
+    public static void UseAppCors(this IApplicationBuilder app)
     {
         app.UseCors();
     }

@@ -2,7 +2,10 @@
 
 using DSRNetSchool.AuthorService;
 using DSRNetSchool.BookService;
+using DSRNetSchool.EmailService;
+using DSRNetSchool.RabbitMQService;
 using DSRNetSchool.Settings;
+using DSRNetSchool.UserAccount;
 
 public static class Bootstrapper
 {
@@ -11,6 +14,10 @@ public static class Bootstrapper
         services
             .AddSettings()
             .AddAuthorService()
-            .AddBookService();
+            .AddBookService()
+            .AddEmailSender()
+            .AddRabbitMq()
+            .AddUserAccountService()
+            ;
     }
 }

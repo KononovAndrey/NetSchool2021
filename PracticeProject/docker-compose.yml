@@ -30,6 +30,16 @@ services:
       - dsrnetschool_rabbitmq 
       - dsrnetschool_redis 
 
+  dsrnetschool_worker:
+    image: ${DOCKER_REGISTRY-}dsrnetschoolworker
+    build:
+      context: .
+      dockerfile: Systems/Worker/DSRNetSchool.Worker/Dockerfile
+    depends_on:
+      - dsrnetschool_sqlserver
+      - dsrnetschool_rabbitmq 
+      - dsrnetschool_redis 
+
   dsrnetschool_web:
     image: ${DOCKER_REGISTRY-}dsrnetschoolweb
     build:

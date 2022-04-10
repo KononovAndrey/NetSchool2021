@@ -30,7 +30,7 @@ public static class IS4Configuration
             .AddInMemoryApiResources(AppResources.Resources)
             .AddInMemoryIdentityResources(AppIdentityResources.Resources)
 
-            .AddTestUsers(AppApiTestUsers.ApiUsers)
+            //.AddTestUsers(AppApiTestUsers.ApiUsers)
 
             .AddDeveloperSigningCredential();
 

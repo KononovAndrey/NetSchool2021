@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\DSRNetSchool.UserAccount\DSRNetSchool.UserAccount.csproj" />
     <ProjectReference Include="..\DSRNetSchool.Db.Domain\DSRNetSchool.Db.Entities.csproj" />
   </ItemGroup>
 

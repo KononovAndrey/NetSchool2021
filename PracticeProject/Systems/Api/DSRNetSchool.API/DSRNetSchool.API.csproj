@@ -85,7 +85,10 @@
     <ProjectReference Include="..\..\..\Data\DSRNetSchool.Db.Context\DSRNetSchool.Db.Context.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.AuthorService\DSRNetSchool.AuthorService.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.BookService\DSRNetSchool.BookService.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.RabbitMQService\DSRNetSchool.RabbitMqService.csproj" />
     <ProjectReference Include="..\..\..\Services\DSRNetSchool.Settings\DSRNetSchool.Settings.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.SMTPService\DSRNetSchool.EmailService.csproj" />
+    <ProjectReference Include="..\..\..\Services\DSRNetSchool.UserAccount\DSRNetSchool.UserAccount.csproj" />
     <ProjectReference Include="..\..\..\Shared\DSRNetSchool.Common\DSRNetSchool.Common.csproj" />
   </ItemGroup>
 
